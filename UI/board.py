@@ -21,7 +21,12 @@ def main(page: ft.Page):
         (7, 14): "./resources/icons/left_arrow.png",
         (14, 7): "./resources/icons/top_arrow.png"
     }
-
+    star = {
+        (8,2) : "./resources/icons/star.png",
+        (2,6) : "./resources/icons/star.png",
+        (6,12) : "./resources/icons/star.png",
+        (12,8) : "./resources/icons/star.png",
+    }
     def is_home_area(row, col):
         return (
                 (0 <= row < 6 and 0 <= col < 6) or  # Red
@@ -68,13 +73,16 @@ def main(page: ft.Page):
         if (row, col) in arrows:
             icon = ft.Image(src=os.path.abspath(arrows[(row, col)]), width=40, height=40, fit=ft.ImageFit.CONTAIN)
 
+        if (row, col) in star:
+            icon = ft.Image(src=os.path.abspath(star[(row, col)]), width=40, height=40, fit=ft.ImageFit.CONTAIN)
+
         return ft.Container(
             width=cell_size,
             height=cell_size,
             bgcolor=color,
             alignment=ft.alignment.bottom_right,
             border=None if is_home_area(row, col) else ft.border.all(0.5, ft.Colors.BLACK),
-            # content=ft.Text(f"{row},{col}", size=8, color=ft.Colors.BLACK) if not icon else icon,
+            content=ft.Text(f"{row},{col}", size=8, color=ft.Colors.BLACK) if not icon else icon,
             padding=0,
             margin=0
         )
