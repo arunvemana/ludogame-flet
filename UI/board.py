@@ -1,6 +1,7 @@
 import os
 import flet as ft
 import flet.canvas as cv
+from flet.core.gesture_detector import TapEvent
 
 # Define the home areas as before
 green_box = [(1, 7), (2, 7), (3, 7), (4, 7), (5, 7), (6, 7), (1, 8)]
@@ -11,6 +12,12 @@ yellow_box = [(8, 13), (7, 13), (7, 12), (7, 11), (7, 10), (7, 9), (7, 8)]
 
 def main(page: ft.Page):
     page.title = "Ludo Board with Triangular Home Areas"
+
+    def on_click(event:TapEvent):
+        x = event.global_x
+        y = event.data
+        print(f"x={x},u={y}")
+        page.add(ft.Text(f"clicked at :x{x},y={y}"))
 
     # Size of each cell
     cell_size = 40
@@ -27,6 +34,7 @@ def main(page: ft.Page):
         (6,12) : "./resources/icons/star.png",
         (12,8) : "./resources/icons/star.png",
     }
+    markers = './resources/icons/people.png'
     def is_home_area(row, col):
         return (
                 (0 <= row < 6 and 0 <= col < 6) or  # Red
@@ -159,29 +167,29 @@ def main(page: ft.Page):
             # Red home circle
             cv.Circle(
                 x=cell_size * 3,
-                y=cell_size * 3,
-                radius=cell_size * 3 - 2,
+                y=cell_size * 2.2,
+                radius=cell_size * 2.8,
                 paint=ft.Paint(style=ft.PaintingStyle.FILL, color=ft.Colors.WHITE),
             ),
 
             cv.Circle(
                 x=cell_size * 12,
-                y=cell_size * 3,
-                radius=cell_size * 3 - 2,
+                y=cell_size * 2.2,
+                radius=cell_size * 2.8,
                 paint=ft.Paint(style=ft.PaintingStyle.FILL, color=ft.Colors.WHITE),
             ),
 
             cv.Circle(
                 x=cell_size * 12,
-                y=cell_size * 12,
-                radius=cell_size * 3 - 2,
+                y=cell_size * 11.2,
+                radius=cell_size * 2.8,
                 paint=ft.Paint(style=ft.PaintingStyle.FILL, color=ft.Colors.WHITE),
             ),
 
             cv.Circle(
-                x=cell_size * 3,
-                y=cell_size * 12,
-                radius=cell_size * 3 - 2,
+                x=cell_size * 2.8,
+                y=cell_size * 11.2,
+                radius=cell_size * 2.8,
                 paint=ft.Paint(style=ft.PaintingStyle.FILL, color=ft.Colors.WHITE),
             ),
 
@@ -294,6 +302,8 @@ def main(page: ft.Page):
         height=cell_size * 15,
     )
 
+    # gesture_detector = ft.GestureDetector(mouse_cursor=ft.MouseCursor.CLICK)
+
     # Add the home circle canvas to the page
     page.add(
         ft.Stack(
@@ -306,8 +316,10 @@ def main(page: ft.Page):
                 ft.Container(
                     home_circle_canvas,
                     alignment=ft.alignment.center
-                )
-            ]
+                ),
+                ft.Container(ft.Image(src=os.path.abspath(markers), width=40, height=40, fit=ft.ImageFit.CONTAIN),padding=ft.padding.only(left=cell_size * 15, top=cell_size * 10)),
+                ft.GestureDetector(on_tap_up=on_click)
+            ],expand=True,
         )
     )
 
